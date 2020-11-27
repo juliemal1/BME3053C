@@ -1,4 +1,4 @@
-clc; clear; close all;
+clc; clear; close all; %testing git
 
 jsonfolderpath = fullfile('/Users/juliemallinger 1/Desktop/covid-19-xray-dataset-master/annotations/all-images/'); %from github
 allimagespath = fullfile('/Users/juliemallinger 1/Desktop/images/'); %from command line download
