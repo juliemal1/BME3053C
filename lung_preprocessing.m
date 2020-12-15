@@ -1,4 +1,4 @@
-clc; clear; close all; %testing git
+clc; clear; close all;
 
 jsonfolderpath = fullfile('/Users/juliemallinger 1/Desktop/covid-19-xray-dataset-master/annotations/all-images/'); %from github
 allimagespath = fullfile('/Users/juliemallinger 1/Desktop/images/'); %from command line download
@@ -72,13 +72,18 @@ for idx = 1: length(jsonfiles)
     [~,savename,~] = fileparts(imgfilepath);
     savename = strcat(savename,'.png');
     
+    %Added while loop to get noncovid cases to 517
+    % make a new script and use randperm
+   
     if iscovid
         savepath = fullfile(covidsavepath,savename);
     else
         savepath = fullfile(healthysavepath,savename);
+        
     end
+
     
-%     figure; %comment this section out if you don't want to see the figure
+%     figure; 
 %     subplot(121);imshow(lungimgstore);%title('original image');
 %     if iscovid, title('covid'); else, title('healthy'); end
 %     subplot(122);imshow(lungimg);title('segmented image');
@@ -90,5 +95,21 @@ for idx = 1: length(jsonfiles)
 end
 
 disp('all done!');   
-    
+
+%% balance the dataset
+covid_files = dir(fullfile(covidsavepath, '*.png')); 
+length_covid_files = length(covid_files); 
+healthy_files = dir(fullfile(healthysavepath, '*.png')); 
+length_healthy_files = length(healthy_files); 
+keep = randperm(length_healthy_files, length_covid_files); %keeping 517 images randomly selected from all of healthy files 
+
+for i = 1:length_healthy_files %going through each healthy picture
+    if ~ismember(i, keep) %if the index, i, is NOT in the keep folder (if its over 517), delete it
+        delfile = healthy_files(i); 
+        delpath = fullfile(delfile.folder,delfile.name); 
+        delete(delpath); 
+        fprintf('done deleting %s\n,',delfile.name);
+    end 
+end 
+
     
